@@ -1,0 +1,13 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/chainlink:$BRANCH_NAME', '-f=./Dockerfile', '--build-arg', 'SGX_SIMULATION=0', '--build-arg', 'ENVIRONMENT=release', '--build-arg', 'COMMIT_SHA=$COMMIT_SHA', '.']
+- name: 'technosophos/slack-notify'
+  env:
+  - 'SLACK_WEBHOOK=https://hooks.slack.com/services/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'
+  - 'SLACK_CHANNEL=ci'
+  - 'SLACK_USERNAME=GoogleCloudBuild'
+  - 'SLACK_TITLE=Chainlink image $TAG_NAME is ready'
+  - 'SLACK_MESSAGE=gcr.io/$PROJECT_ID/chainlink:$BRANCH_NAME'
+images: ['gcr.io/$PROJECT_ID/chainlink:$BRANCH_NAME']
+timeout: 1200s
+
